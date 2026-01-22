@@ -1,9 +1,9 @@
 # docker-credential-acr
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Go Version](https://img.shields.io/github/go-mod/go-version/riedmi/docker-credential-acr)](https://go.dev/)
-[![Release](https://img.shields.io/github/v/release/riedmi/docker-credential-acr)](https://github.com/riedmi/docker-credential-acr/releases)
-[![Container](https://img.shields.io/badge/container-ghcr.io-blue)](https://ghcr.io/riedmi/docker-credential-acr)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/mriedmann/acr-docker-credential-helper)](https://go.dev/)
+[![Release](https://img.shields.io/github/v/release/mriedmann/acr-docker-credential-helper)](https://github.com/mriedmann/acr-docker-credential-helper/releases)
+[![Container](https://img.shields.io/badge/container-ghcr.io-blue)](https://ghcr.io/mriedmann/acr-docker-credential-helper)
 
 Docker credential helper for Azure Container Registry (ACR) using Azure SDK's DefaultAzureCredential.
 
@@ -17,7 +17,7 @@ Download the latest pre-built binary for Linux x86_64:
 
 ```bash
 # Download the latest release
-wget https://github.com/riedmi/docker-credential-acr/releases/latest/download/docker-credential-acr-linux-amd64
+wget https://github.com/mriedmann/acr-docker-credential-helper/releases/latest/download/docker-credential-acr-linux-amd64
 
 # Make executable
 chmod +x docker-credential-acr-linux-amd64
@@ -32,10 +32,10 @@ Extract the binary from the container:
 
 ```bash
 # Pull the container
-docker pull ghcr.io/riedmi/docker-credential-acr:latest
+docker pull ghcr.io/mriedmann/acr-docker-credential-helper:latest
 
 # Extract binary
-docker create --name temp ghcr.io/riedmi/docker-credential-acr:latest
+docker create --name temp ghcr.io/mriedmann/acr-docker-credential-helper:latest
 docker cp temp:/docker-credential-acr /usr/local/bin/
 docker rm temp
 ```
@@ -43,7 +43,7 @@ docker rm temp
 ### From Source
 
 ```bash
-go install github.com/riedmi/docker-credential-acr@latest
+go install github.com/mriedmann/acr-docker-credential-helper@latest
 ```
 
 Ensure `$GOPATH/bin` or `$GOBIN` is in your PATH.
@@ -51,7 +51,7 @@ Ensure `$GOPATH/bin` or `$GOBIN` is in your PATH.
 ### Build Locally
 
 ```bash
-git clone https://github.com/riedmi/docker-credential-acr.git
+git clone https://github.com/mriedmann/acr-docker-credential-helper.git
 cd docker-credential-acr
 CGO_ENABLED=0 go build -ldflags="-s -w" -o docker-credential-acr
 sudo mv docker-credential-acr /usr/local/bin/
