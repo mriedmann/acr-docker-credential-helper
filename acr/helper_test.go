@@ -28,7 +28,7 @@ func (f *fakeAuthenticator) ExtractTenantIDFromToken(_ string) (string, error) {
 	return f.tenantID, f.tenantIDErr
 }
 
-func (f *fakeAuthenticator) ExchangeForACRToken(_, _, _, _ string) (string, error) {
+func (f *fakeAuthenticator) ExchangeForACRToken(_, _, _ string) (string, error) {
 	return f.refreshToken, f.refreshTokenErr
 }
 

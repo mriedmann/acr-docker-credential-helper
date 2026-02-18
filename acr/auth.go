@@ -96,18 +96,17 @@ type ACRTokenResponse struct {
 
 // ExchangeForACRToken exchanges an Azure token for an ACR refresh token
 func (a *AzureAuthenticator) ExchangeForACRToken(
-	registryName string,
-	serverURL string,
+	registryHost string,
 	tenantID string,
 	azureToken string,
 ) (string, error) {
 	// Construct the token exchange URL
-	exchangeURL := fmt.Sprintf("https://%s%s", serverURL, ACRTokenExchangePath)
+	exchangeURL := fmt.Sprintf("https://%s%s", registryHost, ACRTokenExchangePath)
 
 	// Prepare form data
 	formData := url.Values{
 		"grant_type":   []string{"access_token"},
-		"service":      []string{serverURL},
+		"service":      []string{registryHost},
 		"tenant":       []string{tenantID},
 		"access_token": []string{azureToken},
 	}

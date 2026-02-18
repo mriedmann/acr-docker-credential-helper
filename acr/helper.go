@@ -10,7 +10,7 @@ import (
 type Authenticator interface {
 	GetAzureAccessToken() (string, error)
 	ExtractTenantIDFromToken(azureToken string) (string, error)
-	ExchangeForACRToken(registryName, serverURL, tenantID, azureToken string) (string, error)
+	ExchangeForACRToken(registryHost, tenantID, azureToken string) (string, error)
 }
 
 // ACRHelper implements the credentials.Helper interface for ACR
@@ -39,7 +39,7 @@ func NewACRHelperWithAuthenticator(auth Authenticator) *ACRHelper {
 // Returns: username (null GUID), password (refresh token), error
 func (h *ACRHelper) Get(serverURL string) (string, string, error) {
 	// 1. Validate server URL is an ACR registry
-	registryName, err := h.validator.ValidateAndExtract(serverURL)
+	registryHost, _, err := h.validator.ParseAndNormalize(serverURL)
 	if err != nil {
 		return "", "", err
 	}
@@ -62,8 +62,7 @@ func (h *ACRHelper) Get(serverURL string) (string, string, error) {
 
 	// 4. Exchange for ACR refresh token
 	refreshToken, err := h.authenticator.ExchangeForACRToken(
-		registryName,
-		serverURL,
+		registryHost,
 		tenantID,
 		azureToken,
 	)

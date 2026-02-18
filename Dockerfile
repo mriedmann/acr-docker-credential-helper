@@ -1,31 +1,28 @@
 # Stage 1: Build
 FROM docker.io/library/golang:1.24-alpine AS builder
 
+RUN apk add --no-cache upx
+
 WORKDIR /build
 
-# Copy dependency files first (better caching)
 COPY go.mod go.sum ./
-RUN go mod download
+RUN go mod download && go mod verify
 
-# Copy source code
 COPY . .
 
-# Build static binary with no external dependencies
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+RUN CGO_ENABLED=0 go build \
     -ldflags="-s -w" \
+    -trimpath \
     -o docker-credential-acr \
-    .
+    . \
+    && upx --best --lzma docker-credential-acr
 
 # Stage 2: Runtime
 FROM scratch
 
-USER 1000
-
-# Copy CA certificates for HTTPS (required for Azure and ACR API calls)
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-
-# Copy the static binary
 COPY --from=builder /build/docker-credential-acr /docker-credential-acr
 
-# Set entrypoint
+USER 65534:65534
+
 ENTRYPOINT ["/docker-credential-acr"]
