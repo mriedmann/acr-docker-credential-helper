@@ -175,7 +175,7 @@ jobs:
       - name: Attest
         uses: actions/attest-build-provenance@v3
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-name: ghcr.io/${{ github.repository }}
           subject-digest: ${{ steps.container_build.outputs.digest }}
           push-to-registry: true
 
