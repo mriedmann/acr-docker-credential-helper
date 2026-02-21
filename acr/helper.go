@@ -6,9 +6,16 @@ import (
 	"github.com/docker/docker-credential-helpers/credentials"
 )
 
+// Authenticator abstracts Azure authentication for testability
+type Authenticator interface {
+	GetAzureAccessToken() (string, error)
+	ExtractTenantIDFromToken(azureToken string) (string, error)
+	ExchangeForACRToken(registryName, serverURL, tenantID, azureToken string) (string, error)
+}
+
 // ACRHelper implements the credentials.Helper interface for ACR
 type ACRHelper struct {
-	authenticator *AzureAuthenticator
+	authenticator Authenticator
 	validator     *RegistryValidator
 }
 
@@ -16,6 +23,14 @@ type ACRHelper struct {
 func NewACRHelper() *ACRHelper {
 	return &ACRHelper{
 		authenticator: NewAzureAuthenticator(),
+		validator:     NewRegistryValidator(),
+	}
+}
+
+// NewACRHelperWithAuthenticator creates an ACR credential helper with a custom authenticator (for testing)
+func NewACRHelperWithAuthenticator(auth Authenticator) *ACRHelper {
+	return &ACRHelper{
+		authenticator: auth,
 		validator:     NewRegistryValidator(),
 	}
 }
