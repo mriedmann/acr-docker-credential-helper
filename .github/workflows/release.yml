@@ -15,6 +15,7 @@ permissions:
   packages: write
   id-token: write
   attestations: write
+  security-events: write
 
 jobs:
   qa:
@@ -79,6 +80,20 @@ jobs:
           severity: 'CRITICAL,HIGH'
           format: 'sarif'
           output: 'trivy-results.sarif'
+
+      - name: Upload gosec report
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: gosec-results.sarif
+          category: gosec
+
+      - name: Upload Trivy filesystem report
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy-results.sarif
+          category: trivy-fs
 
   build:
     name: Build Binary
@@ -150,6 +165,13 @@ jobs:
           image-ref: acr-credential-helper:ci
           format: 'sarif'
           output: 'trivy-image-results.sarif'
+
+      - name: Upload Trivy image report
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy-image-results.sarif
+          category: trivy-image
 
   publish:
     name: Publish Artifacts
