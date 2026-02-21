@@ -1,4 +1,4 @@
-module github.com/mriedmann/docker-credential-acr
+module github.com/mriedmann/acr-docker-credential-helper
 
 go 1.24.0
 

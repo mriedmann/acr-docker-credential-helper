@@ -52,7 +52,7 @@ Ensure `$GOPATH/bin` or `$GOBIN` is in your PATH.
 
 ```bash
 git clone https://github.com/mriedmann/acr-docker-credential-helper.git
-cd docker-credential-acr
+cd acr-docker-credential-helper
 CGO_ENABLED=0 go build -ldflags="-s -w" -o docker-credential-acr
 sudo mv docker-credential-acr /usr/local/bin/
 ```
@@ -232,16 +232,17 @@ curl https://myregistry.azurecr.io/v2/
 You can test the credential helper directly:
 
 ```bash
-# Set required environment variable
+# (Optional) Set tenant ID if not embedded in your Azure token
 export AZURE_TENANT_ID="your-tenant-id"
 
 # Test with your registry
-echo '{"ServerURL":"myregistry.azurecr.io"}' | docker-credential-acr get
+echo "myregistry.azurecr.io" | docker-credential-acr get
 ```
 
 Expected output:
 ```json
 {
+  "ServerURL": "myregistry.azurecr.io",
   "Username": "00000000-0000-0000-0000-000000000000",
   "Secret": "eyJhbGc..."
 }
@@ -266,7 +267,7 @@ az role assignment create \
 
 ## Limitations
 
-1. **Get operation only**: This helper only implements credential retrieval (`Get`). It does not store credentials (`Add`, `Delete`, `List` not implemented).
+1. **Get operation only**: This helper only implements credential retrieval (`Get`). It does not store credentials (`Add`, `Delete` not implemented). `List` returns an empty map.
 
 2. **ACR registries only**: Only works with `*.azurecr.io` registries. Custom DNS names or private endpoints are not supported.
 
@@ -303,7 +304,7 @@ ldd docker-credential-acr  # Should output: "not a dynamic executable"
 docker build -t docker-credential-acr:dev .
 
 # Test the container
-echo '{"ServerURL":"myregistry.azurecr.io"}' | docker run --rm -i docker-credential-acr:dev get
+echo "myregistry.azurecr.io" | docker run --rm -i docker-credential-acr:dev get
 ```
 
 ### Running Tests

@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/docker/docker-credential-helpers/credentials"
-	"github.com/mriedmann/docker-credential-acr/acr"
+	"github.com/mriedmann/acr-docker-credential-helper/acr"
 )
 
 func main() {
