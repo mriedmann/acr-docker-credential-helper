@@ -42,7 +42,10 @@ jobs:
         run: go vet ./...
 
       - name: Run tests
-        run: go test -v -race -coverprofile=coverage.out ./...
+        uses: robherley/go-test-action@v0.7.1
+        with:
+          testArguments: '-race -short -coverprofile=coverage.out ./...'
+          omit: 'untested'
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v6
