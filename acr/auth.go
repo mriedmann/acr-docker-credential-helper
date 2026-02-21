@@ -20,7 +20,7 @@ const (
 	ACRScope = "https://containerregistry.azure.net/.default"
 
 	// ACR token exchange endpoint path
-	ACRTokenExchangePath = "/oauth2/exchange"
+	ACRTokenExchangePath = "/oauth2/exchange" // #nosec G101
 
 	// Request timeout for token operations
 	TokenRequestTimeout = 30 * time.Second
