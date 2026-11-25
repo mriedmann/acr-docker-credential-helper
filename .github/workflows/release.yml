@@ -49,9 +49,9 @@ jobs:
           omit: 'untested'
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v6
+        uses: golangci/golangci-lint-action@v9
         with:
-          version: latest
+          version: v2.15.0
           args: --timeout=5m
 
   security:
@@ -68,12 +68,12 @@ jobs:
           cache: true
 
       - name: Run gosec
-        uses: securego/gosec@v2.22.11
+        uses: securego/gosec@v2.30.0
         with:
           args: '-no-fail -fmt sarif -out gosec-results.sarif ./...'
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.34.1
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           scan-type: 'fs'
           scan-ref: '.'
@@ -160,7 +160,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Run Trivy vulnerability scanner on image
-        uses: aquasecurity/trivy-action@0.34.1
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: acr-credential-helper:ci
           format: 'sarif'
