@@ -82,14 +82,14 @@ jobs:
           output: 'trivy-results.sarif'
 
       - name: Upload gosec report
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         if: always()
         with:
           sarif_file: gosec-results.sarif
           category: gosec
 
       - name: Upload Trivy filesystem report
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         if: always()
         with:
           sarif_file: trivy-results.sarif
@@ -167,7 +167,7 @@ jobs:
           output: 'trivy-image-results.sarif'
 
       - name: Upload Trivy image report
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         if: always()
         with:
           sarif_file: trivy-image-results.sarif
