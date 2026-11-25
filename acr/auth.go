@@ -100,13 +100,24 @@ func (a *AzureAuthenticator) ExchangeForACRToken(
 	tenantID string,
 	azureToken string,
 ) (string, error) {
+	// Re-validate the host so this function never sends the Azure token to a
+	// non-ACR endpoint, even if a caller skipped validation (SSRF protection).
+	host, _, err := NewRegistryValidator().ParseAndNormalize(registryHost)
+	if err != nil {
+		return "", fmt.Errorf("refusing token exchange: %w", err)
+	}
+
 	// Construct the token exchange URL
-	exchangeURL := fmt.Sprintf("https://%s%s", registryHost, ACRTokenExchangePath)
+	exchangeURL := (&url.URL{
+		Scheme: "https",
+		Host:   host,
+		Path:   ACRTokenExchangePath,
+	}).String()
 
 	// Prepare form data
 	formData := url.Values{
 		"grant_type":   []string{"access_token"},
-		"service":      []string{registryHost},
+		"service":      []string{host},
 		"tenant":       []string{tenantID},
 		"access_token": []string{azureToken},
 	}
